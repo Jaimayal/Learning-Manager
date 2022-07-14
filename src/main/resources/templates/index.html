@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Homepage</title>
+</head>
+<body>
+    <h1> Learning Manager Platform </h1>
+    <h3>Active Resources</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>URL</th>
+                <th>Added</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${resources.empty}">
+                <td colspan="5">No resources active</td>
+            </tr>
+            <tr th:each="resource : ${resources}">
+                <td th:text="${resource.name}"></td>
+                <td th:text="${resource.description}"></td>
+                <td th:text="${resource.type}"></td>
+                <td><a th:href="${resource.url}" th:text="${resource.url}"></a></td>
+                <td th:text="${resource.addedAt}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
