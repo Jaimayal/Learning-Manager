@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ResourceController {
@@ -23,14 +24,26 @@ public class ResourceController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String home(Model model) {
         model.addAttribute("resources", resourceService.findAllUnfinishedResources());
         return "index";
     }
 
     @GetMapping("/completed")
-    public String resources(Model model) {
-        model.addAttribute("resources", resourceService.findAllResources());
+    public String completed(Model model) {
+        model.addAttribute("resources", resourceService.findAllFinishedResources());
         return "completed";
     }
+
+    @GetMapping("/manage")
+    public String manage(Model model) {
+        model.addAttribute("resources", resourceService.findAllResources());
+        return "manage";
+    }
+
+//    @PostMapping("/manage")
+//    public String manage(@RequestBody Map<String, String> form) {
+//        form.get("operation")
+//        return "manage";
+//    }
 }
