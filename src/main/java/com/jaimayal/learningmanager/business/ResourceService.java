@@ -59,4 +59,14 @@ public class ResourceService {
         saveResource(resource);
         return true;
     }
+
+    public boolean deleteResourceById(long id) {
+        Optional<Resource> resourceOptional = findResourceById(id);
+        if (resourceOptional.isEmpty()) {
+            return false;
+        }
+
+        resourceRepository.deleteById(id);
+        return true;
+    }
 }
