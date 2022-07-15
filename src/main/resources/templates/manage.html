@@ -6,6 +6,45 @@
 </head>
 <body>
     <div  layout:fragment="content">
-        <!-- TODO create form to manage resources -->
+        <div th:if="${#lists.isEmpty(resources)}">
+            <p>You haven't added any resources yet</p>
+        </div>
+        <table th:unless="${#lists.isEmpty(resources)}">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Added</th>
+                    <th>Completion</th>
+                    <th colspan="3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="resource : ${resources}">
+                    <td th:text="${resource.name}"></td>
+                    <td th:text="${resource.type}"></td>
+                    <td th:text="${resource.addedAt}"></td>
+                    <td th:text="${resource.finished}"></td>
+                    <td>
+                        <form method="post" action="/manage">
+                            <input type="hidden" name="id" th:value="${resource.id}">
+                            <input type="submit" name="edit" value="Edit" >
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="/manage">
+                            <input type="hidden" name="id" th:value="${resource.id}">
+                            <input type="submit" name="delete" value="Delete" >
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="/manage">
+                            <input type="hidden" name="id" th:value="${resource.id}">
+                            <input type="submit" name="toggle" value="Toggle" >
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>

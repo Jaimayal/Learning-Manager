@@ -4,6 +4,7 @@ import com.jaimayal.learningmanager.persistence.ResourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class ResourceService {
         this.resourceRepository = repository;
     }
 
-    public void addResource(Resource resource) {
+    public void saveResource(Resource resource) {
         resourceRepository.save(resource);
     }
 
@@ -32,10 +33,30 @@ public class ResourceService {
     }
 
     public List<Resource> findAllFinishedResources() {
-        return resourceRepository.findAllByCompletionTrue();
+        return resourceRepository.findAllByFinishedTrue();
     }
 
     public List<Resource> findAllUnfinishedResources() {
-        return resourceRepository.findAllByCompletionFalse();
+        return resourceRepository.findAllByFinishedFalse();
+    }
+
+    public boolean toggleFinishStatusById(long id) {
+        Optional<Resource> resourceOptional = findResourceById(id);
+        if (resourceOptional.isEmpty()) {
+            return false;
+        }
+
+        Resource resource = resourceOptional.get();
+
+        if (resource.isFinished()) {
+            resource.setFinished(false);
+            resource.setFinishedAt(null);
+        } else {
+            resource.setFinished(true);
+            resource.setFinishedAt(LocalDate.now());
+        }
+
+        saveResource(resource);
+        return true;
     }
 }

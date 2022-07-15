@@ -6,7 +6,11 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <table>
+        <div th:if="${#lists.isEmpty(resources)}">
+            <p>You've finished all your resources</p>
+            <p>Go look for some new ones!</p>
+        </div>
+        <table th:unless="${#lists.isEmpty(resources)}">
             <thead>
             <tr>
                 <th>Name</th>
@@ -14,18 +18,22 @@
                 <th>Type</th>
                 <th>URL</th>
                 <th>Added</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${resources.empty}">
-                <td colspan="5">Go look for some new resources!</td>
-            </tr>
             <tr th:each="resource : ${resources}">
                 <td th:text="${resource.name}"></td>
                 <td th:text="${resource.description}"></td>
                 <td th:text="${resource.type}"></td>
                 <td><a th:href="${resource.url}" th:text="${resource.url}"></a></td>
                 <td th:text="${resource.addedAt}"></td>
+                <td>
+                    <form action="/manage" method="post">
+                        <input type="hidden" name="id" th:value="${resource.id}">
+                        <input type="submit" name="finish" value="Mark Finished">
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

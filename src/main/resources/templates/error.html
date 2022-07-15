@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template.html}">
+<head>
+    <title>Error</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1>Error. Something happened.</h1>
+        <p th:text="${message}"></p>
+    </div>
+</body>

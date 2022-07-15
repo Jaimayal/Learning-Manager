@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LayoutThymeleaf {
-
     @Bean
     public LayoutDialect layoutDialect() {
         return new LayoutDialect();

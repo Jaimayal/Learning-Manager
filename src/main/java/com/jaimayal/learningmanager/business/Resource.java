@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Entity @Table(name = "resources")
 @TypeDef(
         name = "resource_enum",
-        typeClass = ResourceTypePostgreSQLEnum.class
+        typeClass = ResourceTypePostgresEnum.class
 )
 public class Resource {
     @Id
@@ -37,6 +37,9 @@ public class Resource {
     @Column(name = "added_at")
     private LocalDate addedAt;
 
-    @Column(name = "completion")
-    private boolean completion;
+    @Column(name = "finished")
+    private boolean finished;
+
+    @Column(name = "finished_at")
+    private LocalDate finishedAt;
 }

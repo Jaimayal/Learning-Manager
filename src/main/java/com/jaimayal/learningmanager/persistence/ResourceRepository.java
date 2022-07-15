@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ResourceRepository extends CrudRepository<Resource, Long> {
-    List<Resource> findAllByCompletionFalse();
+    List<Resource> findAllByFinishedFalse();
 
-    List<Resource> findAllByCompletionTrue();
+    List<Resource> findAllByFinishedTrue();
 }
