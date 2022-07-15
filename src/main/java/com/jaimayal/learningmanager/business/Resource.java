@@ -8,7 +8,12 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
+/**
+ * An Entity class representing a resource.
+ * Matches the values that a tuple can have in the Postgres table "resources".
+ */
 @Data @NoArgsConstructor @AllArgsConstructor
 @Entity @Table(name = "resources")
 @TypeDef(

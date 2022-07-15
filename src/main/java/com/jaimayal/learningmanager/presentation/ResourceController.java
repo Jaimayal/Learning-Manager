@@ -51,7 +51,7 @@ public class ResourceController {
 
         if (form.containsKey("edit")) {
             // TODO implement edit
-//            return "redirect:/edit?id=" + resourceId;
+            return "redirect:/edit?id=" + resourceId;
         } else if (form.containsKey("delete")) {
             // TODO implement delete
             boolean success = resourceService.deleteResourceById(resourceId);
@@ -73,26 +73,24 @@ public class ResourceController {
             model.addAttribute("message", "Invalid operation");
             return "error";
         }
-
-        return "redirect:/";
     }
 
-//    @GetMapping("/edit/{id}")
-//    public String edit(@PathVariable(required = false) Long id, Model model) {
-//        if (id == null) {
-//            model.addAttribute("message", "Invalid resource");
-//            return "error";
-//        }
-//
-//        Optional<Resource> resourceOptional = resourceService.findResourceById(id.get());
-//        if (resourceOptional.isEmpty()) {
-//            model.addAttribute("message", "Resource with id " + id.get() + " not found");
-//            return "error";
-//        }
-//
-//        Resource resource = resourceOptional.get();
-//        model.addAttribute("resource", resource);
-//        model.addAttribute("types", ResourceType.values());
-//        return "edit";
-//    }
+    @GetMapping("/edit/{id}")
+    public String edit(@RequestParam("id") Optional<Long> id, Model model) {
+        if (id.isEmpty()) {
+            model.addAttribute("message", "Invalid resource");
+            return "error";
+        }
+
+        Optional<Resource> resourceOptional = resourceService.findResourceById(id.get());
+        if (resourceOptional.isEmpty()) {
+            model.addAttribute("message", "Resource with id " + id.get() + " not found");
+            return "error";
+        }
+
+        Resource resource = resourceOptional.get();
+        model.addAttribute("resource", resource);
+        model.addAttribute("types", ResourceType.values());
+        return "edit";
+    }
 }
