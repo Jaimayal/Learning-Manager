@@ -6,7 +6,23 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Now modifying resource ${resource.id}</h3>
-        <!-- TODO implement -->
+        <h3 th:text="${resource.name}"> </h3>
+        <form action="/edit" method="post">
+            <input type="hidden" name="id" th:value="${resource.id}">
+
+            <label for="name">Name:</label>
+            <input type="text" name="name" th:value="${resource.name}" id="name"> <br>
+
+            <label for="description">Description:</label>
+            <input type="text" name="description" th:value="${resource.description}" id="description"> <br>
+
+            <label for="url">URL:</label>
+            <input type="text" name="url" th:value="${resource.url}" id="url"> <br>
+
+            <label for="type">Tags:</label>
+            <input type="text" name="type" th:value="${resource.type}" id="type"> <br>
+
+            <input type="submit" name="action" value="Update">
+        </form>
     </div>
 </body>

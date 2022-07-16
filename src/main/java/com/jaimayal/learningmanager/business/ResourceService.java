@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -19,8 +18,44 @@ public class ResourceService {
         this.resourceRepository = repository;
     }
 
-    public void saveResource(Resource resource) {
-        resourceRepository.save(resource);
+    public boolean addResource(String name, String description, String url, String type, String status) {
+        boolean isValid = validateFields(name, description, url, type, status);
+        if (!isValid) {
+            return false;
+        }
+
+        Resource resource = new Resource();
+
+        resource.setName(name);
+        resource.setDescription(description);
+        resource.setUrl(url);
+        resource.setType(ResourceType.valueOf(type));
+        resource.setAddedAt(LocalDate.now());
+
+        saveResource(resource);
+        return true;
+    }
+
+    public boolean deleteResourceById(Long id) {
+        Optional<Resource> resourceOptional = findResourceById(id);
+        if (resourceOptional.isEmpty()) {
+            return false;
+        }
+
+        resourceRepository.deleteById(id);
+        return true;
+    }
+
+    public Boolean existsResourceById(Long id) {
+        return resourceRepository.existsById(id);
+    }
+
+    public List<Resource> findAllFinishedResources() {
+        return resourceRepository.findAllByStatusEquals(ResourceStatus.FINISHED);
+    }
+
+    public List<Resource> findAllInProgressResources() {
+        return resourceRepository.findAllByStatusEquals(ResourceStatus.IN_PROGRESS);
     }
 
     public Optional<Resource> findResourceById(Long id) {
@@ -33,15 +68,16 @@ public class ResourceService {
         return resources;
     }
 
-    public List<Resource> findAllFinishedResources() {
-        return resourceRepository.findAllByStatusEquals(ResourceStatus.FINISHED);
+    public void saveResource(Resource resource) {
+        resourceRepository.save(resource);
     }
 
-    public List<Resource> findAllInProgressResources() {
-        return resourceRepository.findAllByStatusEquals(ResourceStatus.IN_PROGRESS);
-    }
+    public boolean updateResourceById(Long id, String name, String description, String url, String type) {
+        boolean isValid = validateFields(name, description, url, type);
+        if (!isValid) {
+            return false;
+        }
 
-    public boolean setFinishedStatusById(long id) {
         Optional<Resource> resourceOptional = findResourceById(id);
         if (resourceOptional.isEmpty()) {
             return false;
@@ -49,38 +85,51 @@ public class ResourceService {
 
         Resource resource = resourceOptional.get();
 
-        if (resource.getStatus() == ResourceStatus.FINISHED) {
-            return true;
-        } else {
-            resource.setStatus(ResourceStatus.FINISHED);
-            resource.setFinishedAt(LocalDate.now());
-        }
+        resource.setName(name);
+        resource.setDescription(description);
+        resource.setUrl(url);
+        resource.setType(ResourceType.valueOf(type));
 
         saveResource(resource);
         return true;
     }
 
-    public boolean deleteResourceById(long id) {
+    public boolean updateResourceStatusById(Long id, String status) {
         Optional<Resource> resourceOptional = findResourceById(id);
         if (resourceOptional.isEmpty()) {
             return false;
         }
 
-        resourceRepository.deleteById(id);
+        Resource resource = resourceOptional.get();
+
+        ResourceStatus updatedStatus;
+        try {
+            updatedStatus = ResourceStatus.valueOf(status);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        if (resource.getStatus() == updatedStatus) {
+            return true;
+        } else if (updatedStatus == ResourceStatus.FINISHED) {
+            resource.setStatus(updatedStatus);
+            resource.setFinishedAt(LocalDate.now());
+        } else {
+            resource.setStatus(updatedStatus);
+            resource.setFinishedAt(null);
+        }
+
+        saveResource(resource);
         return true;
     }
 
-    public boolean addResource(String name, String description, String url, String type, String status) {
-        Resource resource = new Resource();
+    private boolean validateFields(String... parameters) {
+        for (String parameter : parameters) {
+            if (parameter.isEmpty()) {
+                return false;
+            }
+        }
 
-        resource.setName(name);
-        resource.setDescription(description);
-        resource.setUrl(url);
-        resource.setType(ResourceType.valueOf(type));
-        resource.setStatus(ResourceStatus.valueOf(status));
-        resource.setAddedAt(LocalDate.now());
-
-        saveResource(resource);
         return true;
     }
 }
