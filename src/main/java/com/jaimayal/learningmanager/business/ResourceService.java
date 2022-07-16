@@ -33,14 +33,14 @@ public class ResourceService {
     }
 
     public List<Resource> findAllFinishedResources() {
-        return resourceRepository.findAllByFinishedTrue();
+        return resourceRepository.findAllByStatusEquals(ResourceStatus.FINISHED);
     }
 
-    public List<Resource> findAllUnfinishedResources() {
-        return resourceRepository.findAllByFinishedFalse();
+    public List<Resource> findAllInProgressResources() {
+        return resourceRepository.findAllByStatusEquals(ResourceStatus.IN_PROGRESS);
     }
 
-    public boolean toggleFinishStatusById(long id) {
+    public boolean setFinishedStatusById(long id) {
         Optional<Resource> resourceOptional = findResourceById(id);
         if (resourceOptional.isEmpty()) {
             return false;
@@ -48,11 +48,10 @@ public class ResourceService {
 
         Resource resource = resourceOptional.get();
 
-        if (resource.isFinished()) {
-            resource.setFinished(false);
-            resource.setFinishedAt(null);
+        if (resource.getStatus() == ResourceStatus.FINISHED) {
+            return true;
         } else {
-            resource.setFinished(true);
+            resource.setStatus(ResourceStatus.FINISHED);
             resource.setFinishedAt(LocalDate.now());
         }
 

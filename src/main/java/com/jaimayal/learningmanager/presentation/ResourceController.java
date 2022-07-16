@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,7 +22,7 @@ public class ResourceController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("resources", resourceService.findAllUnfinishedResources());
+        model.addAttribute("resources", resourceService.findAllInProgressResources());
         return "index";
     }
 
@@ -62,7 +60,7 @@ public class ResourceController {
 
             return "redirect:/manage";
         } else if (form.containsKey("toggle") || form.containsKey("finish")) {
-            boolean success = resourceService.toggleFinishStatusById(resourceId);
+            boolean success = resourceService.setFinishedStatusById(resourceId);
             if (!success) {
                 model.addAttribute("message", "Invalid operation over resource with id " + resourceId);
                 return "error";

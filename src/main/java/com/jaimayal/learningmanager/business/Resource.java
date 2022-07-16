@@ -8,7 +8,6 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.function.Consumer;
 
 /**
  * An Entity class representing a resource.
@@ -17,8 +16,8 @@ import java.util.function.Consumer;
 @Data @NoArgsConstructor @AllArgsConstructor
 @Entity @Table(name = "resources")
 @TypeDef(
-        name = "resource_enum",
-        typeClass = ResourceTypePostgresEnum.class
+        name = "postgres_enum",
+        typeClass = PostgresEnum.class
 )
 public class Resource {
     @Id
@@ -36,14 +35,16 @@ public class Resource {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "resource_type")
-    @Type(type = "resource_enum")
+    @Type(type = "postgres_enum")
     private ResourceType type;
 
     @Column(name = "added_at")
     private LocalDate addedAt;
 
-    @Column(name = "finished")
-    private boolean finished;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "resource_type")
+    @Type(type = "postgres_enum")
+    private ResourceStatus status;
 
     @Column(name = "finished_at")
     private LocalDate finishedAt;

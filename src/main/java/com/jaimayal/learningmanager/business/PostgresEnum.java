@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 
-public class ResourceTypePostgresEnum extends EnumType {
+public class PostgresEnum extends EnumType {
     public void nullSafeSet(
             PreparedStatement st,
             Object value,

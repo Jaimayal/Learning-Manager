@@ -24,7 +24,7 @@
                     <td th:text="${resource.name}"></td>
                     <td th:text="${resource.type}"></td>
                     <td th:text="${resource.addedAt}"></td>
-                    <td th:text="${resource.finished}"></td>
+                    <td th:text="${resource.status}"></td>
                     <td>
                         <form method="post" action="/manage">
                             <input type="hidden" name="id" th:value="${resource.id}">
