@@ -28,19 +28,19 @@
                     <td>
                         <form method="post" action="/manage">
                             <input type="hidden" name="id" th:value="${resource.id}">
-                            <input type="submit" name="edit" value="Edit" >
+                            <input type="submit" name="action" value="Edit" >
                         </form>
                     </td>
                     <td>
                         <form method="post" action="/manage">
                             <input type="hidden" name="id" th:value="${resource.id}">
-                            <input type="submit" name="delete" value="Delete" >
+                            <input type="submit" name="action" value="Delete" >
                         </form>
                     </td>
                     <td>
                         <form method="post" action="/manage">
                             <input type="hidden" name="id" th:value="${resource.id}">
-                            <input type="submit" name="toggle" value="Toggle" >
+                            <input type="submit" name="action" value="Toggle" >
                         </form>
                     </td>
                 </tr>

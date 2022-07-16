@@ -48,4 +48,12 @@ public class Resource {
 
     @Column(name = "finished_at")
     private LocalDate finishedAt;
+
+    public Resource (String name, String description, String url, ResourceType type, ResourceStatus status) {
+        this.name = name;
+        this.description = description;
+        this.url = url;
+        this.type = type;
+        this.status = status;
+    }
 }

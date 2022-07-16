@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -66,6 +67,19 @@ public class ResourceService {
         }
 
         resourceRepository.deleteById(id);
+        return true;
+    }
+
+    public boolean addResource(String name, String description, String url, String type, String status) {
+        Resource resource = new Resource(
+                name,
+                description,
+                url,
+                ResourceType.valueOf(type.toUpperCase()),
+                ResourceStatus.valueOf(status.toUpperCase())
+        );
+
+        saveResource(resource);
         return true;
     }
 }

@@ -1,15 +1,12 @@
 package com.jaimayal.learningmanager.presentation;
 
-import com.jaimayal.learningmanager.business.Resource;
 import com.jaimayal.learningmanager.business.ResourceService;
-import com.jaimayal.learningmanager.business.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 public class ResourceController {
@@ -45,50 +42,71 @@ public class ResourceController {
             return "error";
         }
 
-        long resourceId = Long.parseLong(form.get("id"));
-
-        if (form.containsKey("edit")) {
-            // TODO implement edit
-            return "redirect:/edit?id=" + resourceId;
-        } else if (form.containsKey("delete")) {
-            // TODO implement delete
-            boolean success = resourceService.deleteResourceById(resourceId);
-            if (!success) {
-                model.addAttribute("message", "Failed to delete resource");
-                return "error";
-            }
-
-            return "redirect:/manage";
-        } else if (form.containsKey("toggle") || form.containsKey("finish")) {
-            boolean success = resourceService.setFinishedStatusById(resourceId);
-            if (!success) {
-                model.addAttribute("message", "Invalid operation over resource with id " + resourceId);
-                return "error";
-            }
-
-            return "redirect:/manage";
-        } else {
-            model.addAttribute("message", "Invalid operation");
+        if (!form.containsKey("action") || form.get("action").isBlank()) {
+            model.addAttribute("message", "Invalid action");
             return "error";
         }
+
+        long resourceId = Long.parseLong(form.get("id"));
+        String action = switch(form.get("action")) {
+            case "Edit" -> "redirect:/edit/" + resourceId;
+            case "Delete" -> "forward:/delete/" + resourceId;
+            case "Toggle" -> "forward:/finish/" + resourceId;
+            case "Add" -> "forward:/add";
+            default -> {
+                model.addAttribute("message", "Invalid action");
+                yield "error";
+            }
+        };
+
+        return action;
     }
 
-    @GetMapping("/edit/{id}")
-    public String edit(@RequestParam("id") Optional<Long> id, Model model) {
-        if (id.isEmpty()) {
-            model.addAttribute("message", "Invalid resource");
+    @GetMapping("/edit")
+    public String edit(@RequestParam("id") Long id, Model model) {
+        // TODO implement edit
+        return "redirect:/";
+    }
+
+    @PostMapping("/add")
+    public String add(@RequestParam Map<String, String> form, Model model) {
+        String name = form.get("name");
+        String description = form.get("description");
+        String url = form.get("url");
+        String type = form.get("type");
+        String status = form.get("status");
+
+        boolean success = resourceService.addResource(name, description, url, type, status);
+
+        if (!success) {
+            model.addAttribute("message", "Error adding resource");
             return "error";
         }
 
-        Optional<Resource> resourceOptional = resourceService.findResourceById(id.get());
-        if (resourceOptional.isEmpty()) {
-            model.addAttribute("message", "Resource with id " + id.get() + " not found");
+        return "redirect:/manage";
+    }
+
+    @PutMapping("/finish/{id}")
+    public String changeStatus(@PathVariable Long id, Model model) {
+        boolean success = resourceService.setFinishedStatusById(id);
+
+        if (!success) {
+            model.addAttribute("message", "Error changing status");
             return "error";
         }
 
-        Resource resource = resourceOptional.get();
-        model.addAttribute("resource", resource);
-        model.addAttribute("types", ResourceType.values());
-        return "edit";
+        return "redirect:/manage";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String delete(@PathVariable Long id, Model model) {
+        boolean success = resourceService.deleteResourceById(id);
+
+        if (!success) {
+            model.addAttribute("message", "Error deleting resource");
+            return "error";
+        }
+
+        return "redirect:/manage";
     }
 }
