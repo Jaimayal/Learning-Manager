@@ -7,9 +7,9 @@ import java.util.function.Consumer;
  * Matches the values of Postgres type "resource_type".
  */
 public enum ResourceType {
-    COURSE,
     ARTICLE,
     BOOK,
-    VIDEO,
-    OTHER
+    COURSE,
+    OTHER,
+    VIDEO
 }

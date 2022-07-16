@@ -71,13 +71,14 @@ public class ResourceService {
     }
 
     public boolean addResource(String name, String description, String url, String type, String status) {
-        Resource resource = new Resource(
-                name,
-                description,
-                url,
-                ResourceType.valueOf(type.toUpperCase()),
-                ResourceStatus.valueOf(status.toUpperCase())
-        );
+        Resource resource = new Resource();
+
+        resource.setName(name);
+        resource.setDescription(description);
+        resource.setUrl(url);
+        resource.setType(ResourceType.valueOf(type));
+        resource.setStatus(ResourceStatus.valueOf(status));
+        resource.setAddedAt(LocalDate.now());
 
         saveResource(resource);
         return true;

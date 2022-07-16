@@ -37,22 +37,25 @@ public class ResourceController {
 
     @PostMapping("/manage")
     public String manage(@RequestParam Map<String, String> form, Model model) {
-        if (!form.containsKey("id") || form.get("id").isBlank() || !form.get("id").matches("\\d+")) {
-            model.addAttribute("message", "Invalid resource id");
-            return "error";
-        }
-
         if (!form.containsKey("action") || form.get("action").isBlank()) {
             model.addAttribute("message", "Invalid action");
             return "error";
         }
 
+        if ("Add".equals(form.get("action"))) {
+            return "forward:/add";
+        }
+
+        if (!form.containsKey("id") || form.get("id").isBlank() || !form.get("id").matches("\\d+")) {
+            model.addAttribute("message", "Invalid resource id");
+            return "error";
+        }
+
         long resourceId = Long.parseLong(form.get("id"));
-        String action = switch(form.get("action")) {
+        String action = switch (form.get("action")) {
             case "Edit" -> "redirect:/edit/" + resourceId;
             case "Delete" -> "forward:/delete/" + resourceId;
             case "Toggle" -> "forward:/finish/" + resourceId;
-            case "Add" -> "forward:/add";
             default -> {
                 model.addAttribute("message", "Invalid action");
                 yield "error";
@@ -60,12 +63,6 @@ public class ResourceController {
         };
 
         return action;
-    }
-
-    @GetMapping("/edit")
-    public String edit(@RequestParam("id") Long id, Model model) {
-        // TODO implement edit
-        return "redirect:/";
     }
 
     @PostMapping("/add")
@@ -86,7 +83,13 @@ public class ResourceController {
         return "redirect:/manage";
     }
 
-    @PutMapping("/finish/{id}")
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, Model model) {
+        // TODO implement edit
+        return "redirect:/";
+    }
+
+    @PostMapping("/finish/{id}")
     public String changeStatus(@PathVariable Long id, Model model) {
         boolean success = resourceService.setFinishedStatusById(id);
 
@@ -98,7 +101,7 @@ public class ResourceController {
         return "redirect:/manage";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String delete(@PathVariable Long id, Model model) {
         boolean success = resourceService.deleteResourceById(id);
 

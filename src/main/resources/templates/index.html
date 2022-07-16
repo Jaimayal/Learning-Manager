@@ -31,7 +31,7 @@
                 <td>
                     <form action="/manage" method="post">
                         <input type="hidden" name="id" th:value="${resource.id}">
-                        <input type="submit" name="finish" value="Mark Finished">
+                        <input type="submit" name="action" value="Toggle">
                     </form>
                 </td>
             </tr>
@@ -39,7 +39,27 @@
         </table>
         <div>
             <form action="/manage" method="post">
-                <input type="submit" name="add" value="Add Resource">
+                <label for="name">Name</label>
+                <input type="text" name="name", placeholder="Resource Name" id="name">
+                <label for="description">Description</label>
+                <input type="text" name="description" placeholder="Description" id="description">
+                <label for="url">URL</label>
+                <input type="text" name="url" placeholder="URL" id="url">
+
+                <br>
+                <input type="radio" name="type" value="ARTICLE" id="article"> <label for="article">Article</label>
+                <input type="radio" name="type" value="BOOK" id="book"> <label for="book">Book</label>
+                <input type="radio" name="type" value="COURSE" id="course"> <label for="course">Course</label>
+                <input type="radio" name="type" value="VIDEO" id="video"> <label for="video">Video</label>
+                <input type="radio" name="type" value="OTHER" id="other"> <label for="other">Other</label>
+
+                <br>
+                <input type="radio" name="status" value="FINISHED" id="finished"> <label for="finished">Finished</label>
+                <input type="radio" name="status" value="IN_PROGRESS" id="in_progress"> <label for="in_progress">In Progress</label>
+                <input type="radio" name="status" value="NOT_STARTED" id="not_started"> <label for="not_started">Not Started</label>
+
+                <br>
+                <input type="submit" name="action" value="Add">
             </form>
         </div>
     </div>
