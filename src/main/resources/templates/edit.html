@@ -19,8 +19,10 @@
             <label for="url">URL:</label>
             <input type="text" name="url" th:value="${resource.url}" id="url"> <br>
 
-            <label for="type">Tags:</label>
-            <input type="text" name="type" th:value="${resource.type}" id="type"> <br>
+            <div th:each="type : ${resourceTypes}">
+                <input type="radio" name="type" th:value="${type}" th:id="${type}" th:checked="${resource.type} == ${type}">
+                <label th:for="${type}" th:text="${#strings.capitalize(#strings.toLowerCase(type))}"></label>
+            </div>
 
             <input type="submit" name="action" value="Update">
         </form>

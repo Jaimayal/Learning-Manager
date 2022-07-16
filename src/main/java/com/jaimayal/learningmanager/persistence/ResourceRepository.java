@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ResourceRepository extends CrudRepository<Resource, Long> {
     List<Resource> findAllByStatusEquals(ResourceStatus status);
+    List<Resource> findAllByStatusNot(ResourceStatus status);
 }

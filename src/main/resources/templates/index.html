@@ -17,6 +17,7 @@
                 <th>Description</th>
                 <th>Type</th>
                 <th>URL</th>
+                <th>Status</th>
                 <th>Added</th>
                 <th>Actions</th>
             </tr>
@@ -25,13 +26,22 @@
             <tr th:each="resource : ${resources}">
                 <td th:text="${resource.name}"></td>
                 <td th:text="${resource.description}"></td>
-                <td th:text="${resource.type}"></td>
+                <td th:text="${#strings.capitalize(#strings.toLowerCase(resource.type))}"></td>
                 <td><a th:href="${resource.url}" th:text="${resource.url}"></a></td>
+                <td th:text="${#strings.capitalize(#strings.toLowerCase(#strings.replace(resource.status, '_', ' ')))}"></td>
                 <td th:text="${resource.addedAt}"></td>
-                <td>
+                <td th:if="${#strings.equalsIgnoreCase(resource.status, 'IN_PROGRESS')}">
                     <form action="/manage" method="post">
                         <input type="hidden" name="id" th:value="${resource.id}">
-                        <input type="submit" name="action" value="Toggle">
+                        <input type="hidden" name="optionalStatus" value="FINISHED">
+                        <input type="submit" name="action" value="Mark Completed">
+                    </form>
+                </td>
+                <td th:if="${#strings.equalsIgnoreCase(resource.status, 'NOT_STARTED')}">
+                    <form action="/manage" method="post">
+                        <input type="hidden" name="id" th:value="${resource.id}">
+                        <input type="hidden" name="optionalStatus" value="IN_PROGRESS">
+                        <input type="submit" name="action" value="Start">
                     </form>
                 </td>
             </tr>
@@ -40,18 +50,16 @@
         <div>
             <form action="/manage" method="post">
                 <label for="name">Name</label>
-                <input type="text" name="name", placeholder="Resource Name" id="name">
+                <input type="text" name="name" placeholder="Resource Name" id="name">
                 <label for="description">Description</label>
                 <input type="text" name="description" placeholder="Description" id="description">
                 <label for="url">URL</label>
                 <input type="text" name="url" placeholder="URL" id="url">
 
-                <br>
-                <input type="radio" name="type" value="ARTICLE" id="article"> <label for="article">Article</label>
-                <input type="radio" name="type" value="BOOK" id="book"> <label for="book">Book</label>
-                <input type="radio" name="type" value="COURSE" id="course"> <label for="course">Course</label>
-                <input type="radio" name="type" value="VIDEO" id="video"> <label for="video">Video</label>
-                <input type="radio" name="type" value="OTHER" id="other"> <label for="other">Other</label>
+                <div th:each="type : ${resourceTypes}">
+                    <input type="radio" name="type" th:value="${type}" th:id="${type}">
+                    <label th:text="${#strings.capitalize(#strings.toLowerCase(type))}"></label>
+                </div>
 
                 <br>
                 <input type="radio" name="status" value="FINISHED" id="finished"> <label for="finished">Finished</label>

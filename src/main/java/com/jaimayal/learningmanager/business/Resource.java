@@ -42,7 +42,7 @@ public class Resource {
     private LocalDate addedAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "resource_type")
+    @Column(columnDefinition = "status_type")
     @Type(type = "postgres_enum")
     private ResourceStatus status;
 

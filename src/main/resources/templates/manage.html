@@ -22,9 +22,9 @@
             <tbody>
                 <tr th:each="resource : ${resources}">
                     <td th:text="${resource.name}"></td>
-                    <td th:text="${resource.type}"></td>
+                    <td th:text="${#strings.capitalize(#strings.toLowerCase(resource.type))}"></td>
                     <td th:text="${resource.addedAt}"></td>
-                    <td th:text="${resource.status}"></td>
+                    <td th:text="${#strings.capitalize(#strings.toLowerCase(#strings.replace(resource.status, '_', ' ')))}"></td>
                     <td>
                         <form method="post" action="/manage">
                             <input type="hidden" name="id" th:value="${resource.id}">
@@ -38,10 +38,13 @@
                         </form>
                     </td>
                     <td>
-                        <!--TODO make this a radio button to change between different resource status -->
                         <form method="post" action="/manage">
                             <input type="hidden" name="id" th:value="${resource.id}">
-                            <input type="submit" name="action" value="Toggle" >
+                            <br>
+                            <input type="radio" name="status" value="FINISHED" id="finished"> <label for="finished">Finished</label>
+                            <input type="radio" name="status" value="IN_PROGRESS" id="in_progress"> <label for="in_progress">In Progress</label>
+                            <input type="radio" name="status" value="NOT_STARTED" id="not_started"> <label for="not_started">Not Started</label>
+                            <input type="submit" name="action" value="Update Status">
                         </form>
                     </td>
                 </tr>

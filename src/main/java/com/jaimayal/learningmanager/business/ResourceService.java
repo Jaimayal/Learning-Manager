@@ -30,6 +30,7 @@ public class ResourceService {
         resource.setDescription(description);
         resource.setUrl(url);
         resource.setType(ResourceType.valueOf(type));
+        resource.setStatus(ResourceStatus.valueOf(status));
         resource.setAddedAt(LocalDate.now());
 
         saveResource(resource);
@@ -54,8 +55,8 @@ public class ResourceService {
         return resourceRepository.findAllByStatusEquals(ResourceStatus.FINISHED);
     }
 
-    public List<Resource> findAllInProgressResources() {
-        return resourceRepository.findAllByStatusEquals(ResourceStatus.IN_PROGRESS);
+    public List<Resource> findAllNonFinishedResources() {
+        return resourceRepository.findAllByStatusNot(ResourceStatus.FINISHED);
     }
 
     public Optional<Resource> findResourceById(Long id) {
@@ -95,6 +96,11 @@ public class ResourceService {
     }
 
     public boolean updateResourceStatusById(Long id, String status) {
+        boolean isValid = validateFields(status);
+        if (!isValid) {
+            return false;
+        }
+
         Optional<Resource> resourceOptional = findResourceById(id);
         if (resourceOptional.isEmpty()) {
             return false;

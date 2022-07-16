@@ -1,12 +1,17 @@
 package com.jaimayal.learningmanager.presentation;
 
 import com.jaimayal.learningmanager.business.ResourceService;
+import com.jaimayal.learningmanager.business.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class ResourceController {
@@ -19,7 +24,8 @@ public class ResourceController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("resources", resourceService.findAllInProgressResources());
+        model.addAttribute("resources", resourceService.findAllNonFinishedResources());
+        model.addAttribute("resourceTypes", ResourceType.values());
         return "index";
     }
 
@@ -76,6 +82,7 @@ public class ResourceController {
         boolean exists = resourceService.existsResourceById(id);
         if (exists) {
             model.addAttribute("resource", resourceService.findResourceById(id).orElse(null));
+            model.addAttribute("resourceTypes", ResourceType.values());
             return "edit";
         }
 
@@ -115,7 +122,7 @@ public class ResourceController {
         String action = switch (form.get("action")) {
             case "Edit" -> "redirect:/edit/" + resourceId;
             case "Delete" -> "forward:/delete/" + resourceId;
-            case "Toggle" -> "forward:/status/" + resourceId;
+            case "Update Status", "Mark Completed", "Start" -> "forward:/status/" + resourceId;
             default -> {
                 model.addAttribute("message", "Invalid action");
                 yield "error";
@@ -126,15 +133,17 @@ public class ResourceController {
     }
 
     @PostMapping("/status/{id}")
-    public String updateResourceStatus(@PathVariable Long id, @RequestParam Map<String, String> form, Model model) {
-        boolean success = resourceService.updateResourceStatusById(id, form.get("status"));
+    public String updateResourceStatus(@PathVariable Long id, @RequestParam Optional<String> optionalStatus,
+                                       @RequestParam Map<String, String> form, Model model) {
+        String status = optionalStatus.orElseGet(() -> form.get("status"));
+        boolean success = resourceService.updateResourceStatusById(id, status);
 
         if (!success) {
             model.addAttribute("message", "Error changing status");
             return "error";
         }
 
-        return "redirect:/manage";
+        return "redirect:/";
     }
 }
 
