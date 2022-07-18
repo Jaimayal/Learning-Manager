@@ -27,8 +27,8 @@ public class Resource {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "author")
+    private String author;
 
     @Column(name = "url")
     private String url;

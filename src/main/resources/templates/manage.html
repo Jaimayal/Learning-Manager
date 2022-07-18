@@ -5,21 +5,22 @@
     <title>Manage</title>
 </head>
 <body>
-    <div  layout:fragment="content">
-        <div th:if="${#lists.isEmpty(resources)}">
-            <p>You haven't added any resources yet</p>
+    <div layout:fragment="content">
+        <div class="mb-3 justify-content-center text-center" th:if="${#lists.isEmpty(resources)}">
+            <p class="lead">You haven't added any resources yet</p>
         </div>
-        <table th:unless="${#lists.isEmpty(resources)}">
-            <thead>
-                <tr>
+        <div class="table-responsive text-nowrap">
+            <table class="table text-light text-center" th:unless="${#lists.isEmpty(resources)}">
+                <thead>
+                <tr class="table-dark text-light justify-content-center text-center">
                     <th>Name</th>
                     <th>Type</th>
                     <th>Added</th>
-                    <th>Completion</th>
-                    <th colspan="3">Actions</th>
+                    <th>Status</th>
+                    <th colspan="4">Actions</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <tr th:each="resource : ${resources}">
                     <td th:text="${resource.name}"></td>
                     <td th:text="${#strings.capitalize(#strings.toLowerCase(resource.type))}"></td>
@@ -38,17 +39,19 @@
                         </form>
                     </td>
                     <td>
-                        <form method="post" action="/manage">
-                            <input type="hidden" name="id" th:value="${resource.id}">
-                            <br>
-                            <input type="radio" name="status" value="FINISHED" id="finished"> <label for="finished">Finished</label>
-                            <input type="radio" name="status" value="IN_PROGRESS" id="in_progress"> <label for="in_progress">In Progress</label>
-                            <input type="radio" name="status" value="NOT_STARTED" id="not_started"> <label for="not_started">Not Started</label>
-                            <input type="submit" name="action" value="Update Status">
-                        </form>
+                        <div class="justify-content-center">
+                            <form method="post" action="/manage">
+                                <input type="hidden" name="id" th:value="${resource.id}">
+                                <input type="radio" name="status" value="FINISHED" id="finished"> <label for="finished">Finished</label>
+                                <input type="radio" name="status" value="IN_PROGRESS" id="in_progress"> <label for="in_progress">In Progress</label>
+                                <input type="radio" name="status" value="NOT_STARTED" id="not_started"> <label for="not_started">Not Started</label>
+                                <input type="submit" name="action" value="Update Status">
+                            </form>
+                        </div>
                     </td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>

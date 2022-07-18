@@ -6,32 +6,34 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <div th:if="${#lists.isEmpty(resources)}">
-            <p>You haven't completed any resources</p>
-            <p>Go and learn something new!</p>
+        <div class="mb-3 justify-content-center text-center" th:if="${#lists.isEmpty(resources)}">
+            <p class="lead">You haven't completed any resources</p>
+            <p class="lead">Go and learn something new!</p>
         </div>
-        <table th:unless="${#lists.isEmpty(resources)}">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Type</th>
-                <th>URL</th>
-                <th>Added</th>
-                <th>Finished</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="resource : ${resources}">
-                <td th:text="${resource.name}"></td>
-                <td th:text="${resource.description}"></td>
-                <td th:text="${resource.type}"></td>
-                <td><a th:href="${resource.url}" th:text="${resource.url}"></a></td>
-                <td th:text="${resource.addedAt}"></td>
-                <td th:text="${resource.finishedAt}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table text-light text-center" th:unless="${#lists.isEmpty(resources)}">
+                <thead>
+                <tr class="table-dark text-light justify-content-center text-center">
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Type</th>
+                    <th>URL</th>
+                    <th>Added</th>
+                    <th>Finished</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="resource : ${resources}">
+                    <td th:text="${resource.name}"></td>
+                    <td th:text="${resource.author}"></td>
+                    <td th:text="${#strings.capitalize(#strings.toLowerCase(resource.type))}"></td>
+                    <td><a th:href="${resource.url}" th:text="${resource.url}"></a></td>
+                    <td th:text="${resource.addedAt}"></td>
+                    <td th:text="${resource.finishedAt}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>

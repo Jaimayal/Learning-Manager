@@ -38,12 +38,12 @@ public class ResourceController {
     @PostMapping("/add")
     public String add(@RequestParam Map<String, String> form, Model model) {
         String name = form.get("name");
-        String description = form.get("description");
+        String author = form.get("author");
         String url = form.get("url");
         String type = form.get("type");
         String status = form.get("status");
 
-        boolean success = resourceService.addResource(name, description, url, type, status);
+        boolean success = resourceService.addResource(name, author, url, type, status);
 
         if (!success) {
             model.addAttribute("message", "Error adding resource");
@@ -69,11 +69,11 @@ public class ResourceController {
     public String updateResource(@RequestParam Map<String, String> form, Model model) {
         Long id = form.get("id") == null ? null : Long.parseLong(form.get("id"));
         String name = form.get("name");
-        String description = form.get("description");
+        String author = form.get("author");
         String url = form.get("url");
         String type = form.get("type");
 
-        boolean success = resourceService.updateResourceById(id, name, description, url, type);
+        boolean success = resourceService.updateResourceById(id, name, author, url, type);
 
         if (!success) {
             model.addAttribute("message", "Error updating resource");

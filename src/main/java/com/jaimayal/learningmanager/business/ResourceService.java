@@ -18,8 +18,8 @@ public class ResourceService {
         this.resourceRepository = repository;
     }
 
-    public boolean addResource(String name, String description, String url, String type, String status) {
-        boolean isValid = validateFields(name, description, url, type, status);
+    public boolean addResource(String name, String author, String url, String type, String status) {
+        boolean isValid = validateFields(name, author, url, type, status);
         if (!isValid) {
             return false;
         }
@@ -27,7 +27,7 @@ public class ResourceService {
         Resource resource = new Resource();
 
         resource.setName(name);
-        resource.setDescription(description);
+        resource.setAuthor(author);
         resource.setUrl(url);
         resource.setType(ResourceType.valueOf(type));
         resource.setStatus(ResourceStatus.valueOf(status));
@@ -73,8 +73,8 @@ public class ResourceService {
         resourceRepository.save(resource);
     }
 
-    public boolean updateResourceById(Long id, String name, String description, String url, String type) {
-        boolean isValid = validateFields(name, description, url, type);
+    public boolean updateResourceById(Long id, String name, String author, String url, String type) {
+        boolean isValid = validateFields(name, author, url, type);
         if (!isValid) {
             return false;
         }
@@ -87,7 +87,7 @@ public class ResourceService {
         Resource resource = resourceOptional.get();
 
         resource.setName(name);
-        resource.setDescription(description);
+        resource.setAuthor(author);
         resource.setUrl(url);
         resource.setType(ResourceType.valueOf(type));
 
