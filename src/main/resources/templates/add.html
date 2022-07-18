@@ -20,12 +20,17 @@
                         <label class="form-label" for="url">URL</label>
                         <input class="form-control" type="text" name="url" placeholder="Resource URL" id="url">
                     </div>
-
+                    <span class="mb-5">
+                        Type
+                    </span>
                     <div class="form-check" th:each="type : ${resourceTypes}">
                         <input class="form-check-input" type="radio" name="type" th:value="${type}" th:id="${type}">
                         <label class="form-check-label" th:for="${type}" th:text="${#strings.capitalize(#strings.toLowerCase(type))}"></label>
                     </div>
 
+                    <span class="mb-5">
+                        Status
+                    </span>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="status" value="IN_PROGRESS" id="in_progress">
                         <label class="form-check-label" for="in_progress">In Progress</label>

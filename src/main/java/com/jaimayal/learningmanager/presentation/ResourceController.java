@@ -30,7 +30,8 @@ public class ResourceController {
     }
 
     @GetMapping("/add")
-    public String add() {
+    public String add(Model model) {
+        model.addAttribute("resourceTypes", ResourceType.values());
         return "add";
     }
 
