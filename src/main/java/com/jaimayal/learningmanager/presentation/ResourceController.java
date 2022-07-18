@@ -29,6 +29,11 @@ public class ResourceController {
         return "index";
     }
 
+    @GetMapping("/add")
+    public String add() {
+        return "add";
+    }
+
     @PostMapping("/add")
     public String add(@RequestParam Map<String, String> form, Model model) {
         String name = form.get("name");

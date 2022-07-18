@@ -1,17 +1,26 @@
 /* TODO make this pretty lol */
-h1 {
+#title-center {
     text-align: center;
     font-family: 'Open Sans', sans-serif;
     color: rebeccapurple;
 }
 
-p {
-    font-family: 'Open Sans', sans-serif;
-    color: saddlebrown;
+#page-background {
+    background-color: darkgray;
 }
 
-h3 {
-    text-align: center;
-    font-family: 'Open Sans', sans-serif;
-    color: #007875;
+#title-small-text {
+    font-size: 0.1em;
+}
+
+@media (min-width: 768px) {
+    .navbar .navbar-nav {
+        display: inline-block;
+        float: none;
+        vertical-align: top;
+    }
+
+    .navbar .navbar-collapse {
+        text-align: center;
+    }
 }
