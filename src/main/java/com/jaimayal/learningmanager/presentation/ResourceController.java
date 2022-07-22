@@ -24,8 +24,13 @@ public class ResourceController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("resources", resourceService.findAllNonFinishedResources());
-        model.addAttribute("resourceTypes", ResourceType.values());
+        model.addAttribute(
+                "resources",
+                resourceService.findAllNonFinishedResources());
+
+        model.addAttribute(
+                "resourceTypes",
+                ResourceType.values());
         return "index";
     }
 
@@ -43,7 +48,12 @@ public class ResourceController {
         String type = form.get("type");
         String status = form.get("status");
 
-        boolean success = resourceService.addResource(name, author, url, type, status);
+        boolean success = resourceService.addResource(
+                name,
+                author,
+                url,
+                type,
+                status);
 
         if (!success) {
             model.addAttribute("message", "Error adding resource");
@@ -66,14 +76,21 @@ public class ResourceController {
     }
 
     @PostMapping("/edit")
-    public String updateResource(@RequestParam Map<String, String> form, Model model) {
-        Long id = form.get("id") == null ? null : Long.parseLong(form.get("id"));
+    public String updateResource(@RequestParam Map<String, String> form,
+                                 Model model) {
+        Long id = form.get("id") == null ?
+                null : Long.parseLong(form.get("id"));
         String name = form.get("name");
         String author = form.get("author");
         String url = form.get("url");
         String type = form.get("type");
 
-        boolean success = resourceService.updateResourceById(id, name, author, url, type);
+        boolean success = resourceService.updateResourceById(
+                id,
+                name,
+                author,
+                url,
+                type);
 
         if (!success) {
             model.addAttribute("message", "Error updating resource");
@@ -87,8 +104,13 @@ public class ResourceController {
     public String edit(@PathVariable("id") Long id, Model model) {
         boolean exists = resourceService.existsResourceById(id);
         if (exists) {
-            model.addAttribute("resource", resourceService.findResourceById(id).orElse(null));
-            model.addAttribute("resourceTypes", ResourceType.values());
+            model.addAttribute(
+                    "resource",
+                    resourceService.findResourceById(id).orElse(null));
+
+            model.addAttribute(
+                    "resourceTypes",
+                    ResourceType.values());
             return "edit";
         }
 
@@ -98,13 +120,17 @@ public class ResourceController {
 
     @GetMapping("/finished")
     public String completed(Model model) {
-        model.addAttribute("resources", resourceService.findAllFinishedResources());
+        model.addAttribute(
+                "resources",
+                resourceService.findAllFinishedResources());
         return "history";
     }
 
     @GetMapping("/manage")
     public String manage(Model model) {
-        model.addAttribute("resources", resourceService.findAllResources());
+        model.addAttribute(
+                "resources",
+                resourceService.findAllResources());
         return "manage";
     }
 
@@ -119,7 +145,8 @@ public class ResourceController {
             return "forward:/add";
         }
 
-        if (!form.containsKey("id") || form.get("id").isBlank() || !form.get("id").matches("\\d+")) {
+        if (!form.containsKey("id") ||
+                form.get("id").isBlank() || !form.get("id").matches("\\d+")) {
             model.addAttribute("message", "Invalid resource id");
             return "error";
         }
@@ -128,7 +155,8 @@ public class ResourceController {
         String action = switch (form.get("action")) {
             case "Edit" -> "redirect:/edit/" + resourceId;
             case "Delete" -> "forward:/delete/" + resourceId;
-            case "Update Status", "Mark Completed", "Start" -> "forward:/status/" + resourceId;
+            case "Update Status", "Mark Completed", "Start" ->
+                    "forward:/status/" + resourceId;
             default -> {
                 model.addAttribute("message", "Invalid action");
                 yield "error";
@@ -139,8 +167,11 @@ public class ResourceController {
     }
 
     @PostMapping("/status/{id}")
-    public String updateResourceStatus(@PathVariable Long id, @RequestParam Optional<String> optionalStatus,
-                                       @RequestParam Map<String, String> form, Model model) {
+    public String updateResourceStatus(@PathVariable Long id,
+                                       @RequestParam
+                                       Optional<String> optionalStatus,
+                                       @RequestParam Map<String, String> form,
+                                       Model model) {
         String status = optionalStatus.orElseGet(() -> form.get("status"));
         boolean success = resourceService.updateResourceStatusById(id, status);
 
