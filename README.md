@@ -56,7 +56,8 @@ Troubleshooting:
 - Ensure resources table exists in your database. 
   - First access Postgres via ```psql``` in terminal
   - Use command ```\dt``` to list all the tables in your current database
-![tablesPsql](./img/tablesPsql.PNG)
+
+  ![tablesPsql](./img/tablesPsql.PNG)
 
 
 - Check your table "resources" its ok using ```\d resources```
