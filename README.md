@@ -1,5 +1,5 @@
 # Learning Manager
-#### Video Demo:  <URL HERE>
+#### Video Demo: [Demo](https://www.youtube.com/watch?v=kq5JvkpWQGE)
 #### Description:
 'Learning Manager' is a web application built to let you manage 
 the resources (videos, articles, courses, books and others) of 
